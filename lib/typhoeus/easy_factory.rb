@@ -155,6 +155,15 @@ module Typhoeus
           request.execute_headers_callbacks(Response.new(Ethon::Easy::Mirror.from_easy(easy).options))
         end
       end
+      puts "Typhoeus>>easy_factory.rb: setting up on_progress callback"
+      request.on_progress.each do |callback|
+        puts "\trequest.on_progress.each #{callback.inspect}"
+        #easy.on_progress &callback
+        easy.on_progress do |dltotal, dlnow, ultotal, ulnow, easy|
+          puts "\teasy.on_progress"
+          callback.call(dltotal, dlnow, ultotal, ulnow, response)
+        end
+      end
       easy.on_complete do |easy|
         request.finish(Response.new(easy.mirror.options))
         Typhoeus::Pool.release(easy)

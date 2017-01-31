@@ -89,6 +89,13 @@ module Typhoeus
           @on_headers << block if block_given?
           @on_headers
         end
+        
+        def on_progress(&block)
+           puts "Typhoeus>>request/callbacks.rb: on_progress (block_given? #{block_given?}}"
+          @on_progress ||= []
+          @on_progress << block if block_given?
+          @on_progress
+        end
       end
 
       # Execute the headers callbacks and yields response.
